@@ -2,6 +2,7 @@ package youcompany.find.findyoucompany;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class mapas extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private static final LatLng POLITECNICO_GRANCOLOMBIANO= new LatLng(4.636892,-74.055462);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,8 @@ public class mapas extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.addMarker(new MarkerOptions().position(POLITECNICO_GRANCOLOMBIANO).title("Eyy estamos en el poli en clase de Dispositivos Moviles!!"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POLITECNICO_GRANCOLOMBIANO,5));
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
