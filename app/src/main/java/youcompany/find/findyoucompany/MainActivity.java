@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void lanzarHome(View vista){
-        Intent inte= new Intent(this, mapas.class);
+        Intent inte= new Intent(this, home.class);
         startActivity(inte);
     }
 
