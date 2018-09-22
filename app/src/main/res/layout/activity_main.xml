@@ -7,18 +7,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/user_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/editText2"
+        android:layout_alignStart="@+id/user_name"
         android:layout_marginBottom="152dp"
         android:ems="10"
         android:hint="passswod"
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -30,7 +30,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/label_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -40,11 +40,11 @@
         android:text="Usuario" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/label_clave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText"
-        android:layout_alignStart="@+id/textView"
+        android:layout_alignBaseline="@+id/user_pass"
+        android:layout_alignStart="@+id/label_name"
         android:text="Clave" />
 
     <ImageView
@@ -56,7 +56,7 @@
         android:layout_marginTop="102dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -70,7 +70,7 @@
         android:layout_width="287dp"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/button"
+        android:layout_alignStart="@+id/btn_login"
         android:layout_marginStart="-107dp"
         android:layout_marginTop="16dp"
         android:text="FIND YOU COMPANY" />

@@ -29,34 +29,32 @@
         android:id="@+id/btn_perfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/btn_mapa"
-        android:layout_below="@+id/btn_usuarios"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_alignTop="@+id/btn_estadisticas"
         android:text="Mi perfil" />
 
     <Button
         android:id="@+id/btn_usuarios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_estadisticas"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="78dp"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_alignTop="@+id/btn_ayudas"
         android:text="Usuarios" />
 
     <Button
         android:id="@+id/btn_grupos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_mapa"
-        android:layout_alignStart="@+id/btn_mapa"
+        android:layout_above="@+id/btn_estadisticas"
+        android:layout_alignEnd="@+id/btn_perfil"
         android:text="Grupos" />
 
     <Button
         android:id="@+id/btn_mapa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageView3"
-        android:layout_marginBottom="22dp"
+        android:layout_alignEnd="@+id/imageView3"
+        android:layout_below="@+id/btn_usuarios"
         android:onClick="lanzarMapa"
         android:text="Mapa" />
 
@@ -75,7 +73,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/imageView3"
-        android:layout_below="@+id/imageView3"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="138dp"
         android:text="Ayudas" />
 
 </RelativeLayout>
