@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">find_you_company</string>
+    <string name="version">version 1.0.0</string>
+    <string name="aplicacion">FIND YOUR COMPANY</string>
     <string name="title_activity_mapas">Map</string>
+    <string name="txtIdUnico">ID</string>
+    <string name="txtNombres">Nombres</string>
+    <string name="txtApellidos">Apellidos</string>
+    <string name="txtEmail">E-mail</string>
+    <string name="txtClave">Password</string>
+    <string name="txtLogin">Log-In</string>
+    <string name="txtRegistrar">Registrar</string>
 </resources>

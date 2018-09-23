@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".registro">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/aplicacion" />
+
+    <TextView
+        android:id="@+id/lbl_title"
+        android:layout_width="81dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="59dp"
+        android:fontFamily="monospace"
+        android:text="@string/txtRegistrar" />
+
+    <EditText
+        android:id="@+id/user_email_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="54dp"
+        android:layout_marginTop="101dp"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:hint="@string/txtEmail"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/user_name_r"
+        android:layout_width="181dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/user_email_r"
+        android:layout_below="@+id/user_email_r"
+        android:layout_marginEnd="53dp"
+        android:layout_marginTop="167dp"
+        android:layout_toEndOf="@+id/user_email_r"
+        android:layout_toStartOf="@+id/user_email_r"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:hint="@string/txtNombres"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/user_last_name_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/user_name_r"
+        android:layout_centerInParent="true"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:hint="@string/txtApellidos"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/user_pass_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/user_last_name_r"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="177dp"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:hint="@string/txtClave"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/lbl_name_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/user_name_r"
+        android:layout_alignLeft="@+id/user_name_r"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="51dp"
+        android:fontFamily="monospace"
+        android:text="@string/txtNombres" />
+
+    <TextView
+        android:id="@+id/lbl_email_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/user_email_r"
+        android:layout_alignLeft="@+id/user_email_r"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="63dp"
+        android:fontFamily="monospace"
+        android:text="@string/txtEmail" />
+
+    <TextView
+        android:id="@+id/lbl_pass_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/user_pass_r"
+        android:layout_alignLeft="@+id/user_pass_r"
+        android:layout_alignStart="@+id/lbl_name"
+        android:layout_toStartOf="@+id/user_last_name_r"
+        android:fontFamily="monospace"
+        android:text="@string/txtClave" />
+
+    <TextView
+        android:id="@+id/lbl_last_name_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/user_last_name_r"
+        android:layout_alignStart="@+id/lbl_name"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/user_name_r"
+        android:fontFamily="monospace"
+        android:text="@string/txtApellidos" />
+
+    <TextView
+        android:id="@+id/app_version_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="monospace"
+        android:text="@string/version" />
+
+    <Button
+        android:id="@+id/registrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:fontFamily="monospace"
+        android:onClick="registrar"
+        android:text="@string/txtRegistrar" />
+
+</RelativeLayout>

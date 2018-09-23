@@ -41,7 +41,7 @@ public class mapas extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.addMarker(new MarkerOptions().position(POLITECNICO_GRANCOLOMBIANO).title("Eyy estamos en el poli en clase de Dispositivos Moviles!!"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POLITECNICO_GRANCOLOMBIANO,5));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(POLITECNICO_GRANCOLOMBIANO,17.0f));
 
     }
 }

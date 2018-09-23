@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/user_name"
-        android:layout_marginBottom="152dp"
+        android:layout_alignStart="@+id/user_email"
+        android:layout_marginBottom="143dp"
         android:ems="10"
-        android:hint="passswod"
+        android:hint="@string/txtClave"
         android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/user_name"
+        android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -26,26 +26,26 @@
         android:layout_marginBottom="207dp"
         android:layout_marginEnd="30dp"
         android:ems="10"
-        android:hint="usuario"
-        android:inputType="textPersonName" />
+        android:hint="@string/txtEmail"
+        android:inputType="textEmailAddress" />
 
     <TextView
-        android:id="@+id/label_name"
+        android:id="@+id/lbl_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="224dp"
+        android:layout_marginBottom="223dp"
         android:layout_marginStart="49dp"
-        android:text="Usuario" />
+        android:text="@string/txtEmail" />
 
     <TextView
-        android:id="@+id/label_clave"
+        android:id="@+id/lbl_clave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/user_pass"
-        android:layout_alignStart="@+id/label_name"
-        android:text="Clave" />
+        android:layout_alignStart="@+id/lbl_email"
+        android:text="@string/txtClave" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -61,17 +61,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="63dp"
-        android:onClick="lanzarHome"
-        android:text="Login" />
+        android:layout_marginBottom="57dp"
+        android:onClick="login"
+        android:text="@string/txtLogin" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="287dp"
-        android:layout_height="40dp"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/btn_login"
-        android:layout_marginStart="-107dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="16dp"
-        android:text="FIND YOU COMPANY" />
+        android:text="@string/aplicacion" />
+
+    <TextView
+        android:id="@+id/app_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/version" />
+
 </RelativeLayout>
