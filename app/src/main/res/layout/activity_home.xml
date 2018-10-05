@@ -20,9 +20,8 @@
         android:id="@+id/textView4"
         android:layout_width="287dp"
         android:layout_height="40dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/text_lat"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
         android:text="FIND YOU COMPANY" />
 
     <Button
@@ -76,5 +75,21 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="138dp"
         android:text="Ayudas" />
+
+    <TextView
+        android:id="@+id/text_lat"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btn_perfil"
+        android:layout_below="@+id/text_long"
+        android:text="ASA" />
+
+    <TextView
+        android:id="@+id/text_long"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btn_perfil"
+        android:layout_alignParentTop="true"
+        android:text="prueba" />
 
 </RelativeLayout>

@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import bo.Usuario;
+
 public class MainActivity extends AppCompatActivity {
 
     private int estadoPermisoLocalizacion;
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("AASKDJAS", "signInWithEmail:success");
                             userLogin = miLogin.getCurrentUser();
-
+                            lanzarLgoin();
                         } else {
                              lanzarRegistro();
                             // If sign in fails, display a message to the user.
@@ -173,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
     protected void lanzarRegistro(){
         Intent inte= new Intent(this, registro.class);
         inte.putExtra("email",this.email);
+        startActivity(inte);
+    }
+
+    protected void lanzarLgoin(){
+        Intent inte= new Intent(this, home.class);
+        inte.putExtra(Usuario.PROP_CLAVE,this.getPass());
+        inte.putExtra(Usuario.PROP_EMAIL,this.getEmail());
         startActivity(inte);
     }
 }
