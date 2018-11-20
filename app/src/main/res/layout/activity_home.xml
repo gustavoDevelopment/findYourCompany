@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/imageView3"
         android:layout_alignTop="@+id/btn_ayudas"
+        android:onClick="goToUser"
         android:text="Usuarios" />
 
     <Button
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_estadisticas"
         android:layout_alignEnd="@+id/btn_perfil"
+        android:onClick="goToGrupos"
         android:text="Grupos" />
 
     <Button
@@ -91,5 +93,14 @@
         android:layout_alignEnd="@+id/btn_perfil"
         android:layout_alignParentTop="true"
         android:text="prueba" />
+
+    <TextView
+        android:id="@+id/app_user_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="19dp"
+        android:text="no_login" />
 
 </RelativeLayout>

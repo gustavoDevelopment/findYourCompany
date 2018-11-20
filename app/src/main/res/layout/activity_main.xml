@@ -37,7 +37,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="223dp"
         android:layout_marginStart="49dp"
-        android:text="@string/txtEmail" />
+        android:text="@string/txtUserName" />
 
     <TextView
         android:id="@+id/lbl_clave"

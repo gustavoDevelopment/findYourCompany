@@ -30,6 +30,8 @@ dependencies {
     //noinspection GradleCompatible
     //implementation 'org.apache.httpcomponents:project:8'
     implementation 'com.android.support:appcompat-v7:25.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

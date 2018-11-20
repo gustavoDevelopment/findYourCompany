@@ -8,6 +8,8 @@
     <string name="txtApellidos">Apellidos</string>
     <string name="txtEmail">E-mail</string>
     <string name="txtClave">Password</string>
-    <string name="txtLogin">Log-In</string>
+    <string name="txtLogin">Ingresar</string>
     <string name="txtRegistrar">Registrar</string>
+    <string name="txtUserName">Usuario</string>
+
 </resources>

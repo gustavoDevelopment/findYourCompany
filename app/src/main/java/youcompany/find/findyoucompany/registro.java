@@ -130,7 +130,7 @@ public class registro extends AppCompatActivity {
 
                 public void onProviderDisabled(String provider) {}
             };
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, time, distance,locationListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, time, distance,locationListener);
 
         }
 

@@ -8,6 +8,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import bo.Grupo;
 import bo.User;
 import interfaces.apiService;
 import retrofit2.Call;
@@ -16,7 +17,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class usuarios extends AppCompatActivity {
+public class grupos extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_grupos);
+        this.setUsuarioLogin((User)getIntent().getExtras().get("login"));
+        arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,titles);
+        list = (ListView) findViewById(R.id.listado_grupos);
+        list.setAdapter(arrayAdapter);
+        this.getGrupos();
+    }
+
     User usuarioLogin;
     ListView list;
     ArrayList<String> titles = new ArrayList<>();
@@ -54,35 +67,22 @@ public class usuarios extends AppCompatActivity {
         this.arrayAdapter = arrayAdapter;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_usuarios);
-        this.setUsuarioLogin((User)getIntent().getExtras().get("login"));
-        arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,titles);
-        list = (ListView) findViewById(R.id.lista_usuarios);
-        list.setAdapter(arrayAdapter);
-        this.getUsuarios();
-
-
-    }
-
-    private void getUsuarios() {
+    private void getGrupos() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cunlmsprueba.catedra.edu.co:8090").addConverterFactory(GsonConverterFactory.create()).build();
         apiService service = retrofit.create(apiService.class);
-        Call<List<User>> call = service.getUsuarios();
+        Call<List<Grupo>> call = service.getGrupos();
 
-        call.enqueue(new Callback<List<User>>() {
+        call.enqueue(new Callback<List<Grupo>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                for(User us : response.body()) {
-                    titles.add("N° Documento: "+us.getDocumento()+"\nNombres: "+us.getPrimerNombre()+"\nApellidos: "+us.getPrimerApellido());
+            public void onResponse(Call<List<Grupo>> call, Response<List<Grupo>> response) {
+                for(Grupo gr : response.body()) {
+                    titles.add("Cod: "+gr.getCodigo()+"\nGrupo: "+gr.getNombre());
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
+            public void onFailure(Call<List<Grupo>> call, Throwable t) {
             }
         });
     }

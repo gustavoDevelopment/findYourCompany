@@ -23,7 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import bo.User;
 import bo.Usuario;
+import interfaces.apiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseUser userLogin;
+    User usuarioLogin;
 
     public FirebaseAuth getMiLogin() {
         return miLogin;
@@ -42,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setMiLogin(FirebaseAuth miLogin) {
         this.miLogin = miLogin;
+    }
+
+    public User getUsuarioLogin() {
+        return usuarioLogin;
+    }
+
+    public void setUsuarioLogin(User usuarioLogin) {
+        this.usuarioLogin = usuarioLogin;
     }
 
     public String getEmail() {
@@ -151,25 +167,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected  void validarLogin(final String email, final String pass){
-        this.miLogin.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("AASKDJAS", "signInWithEmail:success");
-                            userLogin = miLogin.getCurrentUser();
-                            lanzarLgoin();
-                        } else {
-                             lanzarRegistro();
-                            // If sign in fails, display a message to the user.
-                            Log.w("ASDASDASD", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
 
-                        }
-
-
-                    }
-                });
+        this.getUsuario(email);
+        if(this.usuarioLogin!=null)
+            if(this.usuarioLogin.getId()!=null)
+                this.lanzarLgoin();
     }
 
     protected void lanzarRegistro(){
@@ -182,6 +184,25 @@ public class MainActivity extends AppCompatActivity {
         Intent inte= new Intent(this, home.class);
         inte.putExtra(Usuario.PROP_CLAVE,this.getPass());
         inte.putExtra(Usuario.PROP_EMAIL,this.getEmail());
+        inte.putExtra("login",this.getUsuarioLogin());
         startActivity(inte);
+    }
+
+    private void getUsuario(String userName) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cunlmsprueba.catedra.edu.co:8090").addConverterFactory(GsonConverterFactory.create()).build();
+        apiService service = retrofit.create(apiService.class);
+        Call<User> call = service.getUserById(1);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                   setUsuarioLogin(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
     }
 }
