@@ -1,8 +1,10 @@
 package youcompany.find.findyoucompany;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth miLogin;
     private String email;
     private String pass;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    FirebaseUser userLogin;
     User usuarioLogin;
+
+    private ProgressDialog pd = null;
+    private Object data = null;
 
     public FirebaseAuth getMiLogin() {
         return miLogin;
@@ -76,22 +79,6 @@ public class MainActivity extends AppCompatActivity {
         this.pass = pass;
     }
 
-    public FirebaseDatabase getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(FirebaseDatabase database) {
-        this.database = database;
-    }
-
-    public DatabaseReference getMyRef() {
-        return myRef;
-    }
-
-    public void setMyRef(DatabaseReference myRef) {
-        this.myRef = myRef;
-    }
-
     public int getEstadoPermisoLocalizacion() {
         return estadoPermisoLocalizacion;
     }
@@ -119,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         this.miLogin.getCurrentUser();
-        this.crearFirebaseDB();
     }
 
     public void loadDatos(){
@@ -128,13 +114,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(View vista){
+        this.pd = ProgressDialog.show(this, "Procesando", "Espere unos segundos...", true, false);
         this.loadDatos();
         if(!this.getEmail().equals("") ){
             if(!this.getPass().equals("")) {
                 this.validarLogin(this.getEmail(),this.getPass());
-                System.out.println("Intento para ----> "+((EditText)findViewById(R.id.user_email)).getText().toString());
-                System.out.println("Usando el password ----> "+((EditText)findViewById(R.id.user_pass)).getText().toString());
-
             }else{
                 ((EditText)findViewById(R.id.user_email)).setError("El e-mail es requerido!");
             }
@@ -161,17 +145,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected  void crearFirebaseDB(){
-       this.setDatabase(FirebaseDatabase.getInstance());
-       this.setMyRef(this.getDatabase().getReference());
-    }
-
     protected  void validarLogin(final String email, final String pass){
-
-        this.getUsuario(email);
-        if(this.usuarioLogin!=null)
-            if(this.usuarioLogin.getId()!=null)
-                this.lanzarLgoin();
+        this.getUsuario(email,pass);
     }
 
     protected void lanzarRegistro(){
@@ -181,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void lanzarLgoin(){
+        this.pd.dismiss();
         Intent inte= new Intent(this, home.class);
         inte.putExtra(Usuario.PROP_CLAVE,this.getPass());
         inte.putExtra(Usuario.PROP_EMAIL,this.getEmail());
@@ -188,15 +164,30 @@ public class MainActivity extends AppCompatActivity {
         startActivity(inte);
     }
 
-    private void getUsuario(String userName) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cunlmsprueba.catedra.edu.co:8090").addConverterFactory(GsonConverterFactory.create()).build();
-        apiService service = retrofit.create(apiService.class);
-        Call<User> call = service.getUserById(1);
+    protected void noExisteUser(){
+        this.pd.dismiss();
+        Toast.makeText(this,"El usuario o clave incorrectos",Toast.LENGTH_LONG).show();
+    }
 
+
+
+    private void getUsuario(String userName,String pass) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
+        apiService service = retrofit.create(apiService.class);
+        Call<User> call = service.login(userName,pass);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                    setUsuarioLogin(response.body());
+                if(usuarioLogin!=null) {
+                    if (usuarioLogin.getId() != null)
+                        lanzarLgoin();
+                    else{
+                        noExisteUser();
+                    }
+                }else{
+                    noExisteUser();
+                    }
             }
 
             @Override
@@ -205,4 +196,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

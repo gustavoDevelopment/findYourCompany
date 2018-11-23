@@ -26,6 +26,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import bo.User;
 import bo.Usuario;
+import interfaces.apiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 import static youcompany.find.findyoucompany.MainActivity.CODE_REQUEST;
 
@@ -47,8 +54,9 @@ public class home extends AppCompatActivity {
         this.setUsuarioLogin((User)getIntent().getExtras().get("login"));
         ((TextView) findViewById(R.id.app_user_login)).setText("Login: " + getUsuarioLogin().getPrimerNombre());
         reUbicar(this.getUsuarioLogin());
-        ((TextView) findViewById(R.id.text_long)).setText("Longitud: " + getUsuarioLogin().getLongitud());
+        ((TextView) findViewById(R.id.text_long)).setText("Longitud: " + getUsuarioLogin().getLonguitud());
         ((TextView) findViewById(R.id.text_lat)).setText("Latitud: " + getUsuarioLogin().getLatitud());
+        this.actualizarPosicion(this.getUsuarioLogin());
     }
 
     @Override
@@ -59,6 +67,7 @@ public class home extends AppCompatActivity {
 
     public void goToMapa(View vista){
         Intent inte= new Intent(this, mapas.class);
+        inte.putExtra("login",this.getUsuarioLogin());
         startActivity(inte);
     }
 
@@ -107,8 +116,8 @@ public class home extends AppCompatActivity {
             setLatitud(String.valueOf(l.getLatitude()));
             setLongitud(String.valueOf(l.getLongitude()));
             try {
-                this.getUsuarioLogin().setLatitud(String.valueOf(l.getLatitude()));
-                this.getUsuarioLogin().setLongitud(String.valueOf(l.getLongitude()));
+                this.getUsuarioLogin().setLatitud(Float.valueOf(String.valueOf(l.getLatitude())));
+                this.getUsuarioLogin().setLonguitud(Float.valueOf(String.valueOf(l.getLongitude())));
             }catch (Exception e){
                 Log.d("LOCATION","NO se consigio los daos de localizacion.");
             }
@@ -157,12 +166,30 @@ public class home extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},CODE_REQUEST );
             }else{
                 Toast.makeText(this,"tiene permisos de Localizacíon",Toast.LENGTH_LONG).show();
-                this.getUsuarioLogin().setLatitud(String.valueOf(((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLatitude()));
-                this.getUsuarioLogin().setLongitud(String.valueOf(((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLongitude()));
+                this.getUsuarioLogin().setLatitud(Float.valueOf (String.valueOf( ((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLatitude())));
+                this.getUsuarioLogin().setLonguitud(Float.valueOf (String.valueOf(((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLongitude())));
                 this.setReloadLocationAlter(false);
             }
         }catch (Exception e){
             Log.d("LOCATION","NO se consigio los daos de localizacion.");
         }
+    }
+
+    private void actualizarPosicion(User usuario){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
+        apiService service = retrofit.create(apiService.class);
+        Call<User> call = service.actualizarUsuario(usuario);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                setUsuarioLogin(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
     }
 }

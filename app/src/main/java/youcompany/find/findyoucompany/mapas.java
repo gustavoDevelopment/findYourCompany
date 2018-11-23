@@ -17,19 +17,26 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import bo.User;
 import bo.Usuario;
+import interfaces.apiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 public class mapas extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final LatLng POLITECNICO_GRANCOLOMBIANO= new LatLng(4.636892,-74.055462);
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("users");
-    private static HashMap<String, Usuario> usuarios = new HashMap<String,Usuario>();
-    private Usuario logeado;
+    private List<User> usuarios= new ArrayList<>();
+    private User usuarioLogin;
 
 
     @Override
@@ -46,37 +53,7 @@ public class mapas extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onStart() {
         super.onStart();
-        this.setLogeado((Usuario) getIntent().getExtras().getSerializable("logeado"));
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Iterable<DataSnapshot> data = dataSnapshot.getChildren();
-
-                for (DataSnapshot dt : data) {
-                    Usuario loaded = dt.getValue(Usuario.class);
-                    if(!usuarios.containsKey(dt.child(Usuario.PROP_CLAVE).getValue(String.class))) {
-                        usuarios.put(dt.child(Usuario.PROP_CLAVE).getValue(String.class), loaded);
-                    }
-                    Log.d("USUARIOS", "DATA--->" + dt.child(Usuario.PROP_CLAVE) + "| " + dt.child(Usuario.PROP_NOMBRE) + " " + dt.child(Usuario.PROP_APELLIDO));
-
-                }
-                for(Usuario user:usuarios.values()){
-                    Log.d("Usuario","User:"+user.getNombre()+" "+user.getApellido());
-                    LatLng pos_user= new LatLng(Double.parseDouble(user.getLatitud()),Double.parseDouble(user.getLongitud()));
-                    mMap.addMarker(new MarkerOptions().position(pos_user).title("Hola soy yo: "+user.getNombre()+" "+user.getApellido()));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos_user,15.05f));
-                }
-                Log.d("TAG", "Value is: " + data);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException());
-            }
-        });
+        this.setUsuarioLogin((User) getIntent().getExtras().getSerializable("login"));
     }
 
     /**
@@ -98,21 +75,41 @@ public class mapas extends FragmentActivity implements OnMapReadyCallback {
     }
 
     public void agregarUsuariosMapa(){
-        for(Usuario user:usuarios.values()){
-            if(!this.logeado.getClave().equals(user.getClave())) {
-                Log.d("Usuario", "User:" + user.getNombre() + " " + user.getApellido());
-                LatLng pos_user = new LatLng(Double.parseDouble(user.getLatitud()), Double.parseDouble(user.getLongitud()));
-                mMap.addMarker(new MarkerOptions().position(pos_user).title("Hola soy yo: " + user.getNombre() + " " + user.getApellido()));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos_user, 10.05f));
-            }
-        }
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
+            apiService service = retrofit.create(apiService.class);
+            Call<List<User>> call = service.getUsuarios();
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    for(User us : response.body()) {
+                        usuarios.add(us);
+                        Log.d("Usuario", "User:" + us.getPrimerNombre()+ " " + us.getPrimerApellido());
+                        LatLng pos_user = new LatLng(us.getLatitud(), us.getLonguitud());
+                        mMap.addMarker(new MarkerOptions().position(pos_user).title("Hola soy yo: " + us.getPrimerNombre() + " " + us.getPrimerApellido()));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos_user, 10.05f));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                }
+            });
+
     }
 
-    public Usuario getLogeado() {
-        return logeado;
+    public List<User> getUsuarios() {
+        return usuarios;
     }
 
-    public void setLogeado(Usuario logeado) {
-        this.logeado = logeado;
+    public void setUsuarios(List<User> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    public User getUsuarioLogin() {
+        return usuarioLogin;
+    }
+
+    public void setUsuarioLogin(User usuarioLogin) {
+        this.usuarioLogin = usuarioLogin;
     }
 }

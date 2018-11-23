@@ -1,208 +1,159 @@
 package youcompany.find.findyoucompany;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import bo.Usuario;
-
-import static youcompany.find.findyoucompany.MainActivity.CODE_REQUEST;
+import bo.User;
+import interfaces.apiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 public class registro extends AppCompatActivity {
 
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    private Usuario usuario;
-    private FirebaseAuth miLogin;
-    private FirebaseUser userLogin;
-    private LocationManager locManager;
-    private Location loc;
-    private boolean reloadLocationAlter=true;
-    long time = 600* 1000;
-    long distance = 10;
 
-
-    public FirebaseDatabase getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(FirebaseDatabase database) {
-        this.database = database;
-    }
-
-    public DatabaseReference getMyRef() {
-        return myRef;
-    }
-
-    public void setMyRef(DatabaseReference myRef) {
-        this.myRef = myRef;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    private User usuarioNuevo;
+    private Integer idUserLoaded;
+    private User usuarioLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+        this.setUsuarioLogin((User)getIntent().getExtras().get("login"));
+        try{
+            this.setIdUserLoaded(Integer.valueOf(getIntent().getExtras().get("idEdit").toString()));
+            this.loadUsuario(this.getIdUserLoaded());
+        }catch (Exception e){
+
+        }
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        this.crearFirebaseDB();
-        this.usuario= new Usuario();
-        this.miLogin= FirebaseAuth.getInstance();
-        this.getUsuario().setEmail(getIntent().getExtras().getString("email"));
-        ((EditText)findViewById(R.id.user_email_r)).setText(this.getUsuario().getEmail());
+        this.usuarioNuevo= new User();
     }
 
-    protected  void crearFirebaseDB(){
-        this.setDatabase(FirebaseDatabase.getInstance());
-        this.setMyRef(this.getDatabase().getReference());
-    }
-
-    public void registrar(View vista){
+    public void goToRegistrar(View vista){
         this.loadDatos();
-        if(!this.getUsuario().getEmail().equals("") ) {
-            if (!this.getUsuario().getNombre().equals("")) {
-                if (!this.getUsuario().getClave().equals("")) {
-                    this.crearUsuario(this.getUsuario());
+        if(!this.getUsuarioNuevo().getEmail().equals("") ) {
+            if (!this.getUsuarioNuevo().getPrimerNombre().equals("")) {
+                if (!this.getUsuarioNuevo().getPrimerApellido().equals("")) {
+                    this.crearUsuario(this.getUsuarioNuevo());
                 }else{
-                    ((EditText)findViewById(R.id.user_pass_r)).setError("El password es requerido!");
+                    ((EditText)findViewById(R.id.input_username)).setError("El password es requerido!");
                 }
             }else{
-                ((EditText)findViewById(R.id.user_name_r)).setError("El Nombre es requerido!");
+                ((EditText)findViewById(R.id.input_nombres)).setError("El Nombre es requerido!");
             }
         }else{
-                ((EditText)findViewById(R.id.user_email_r)).setError("El E-mail es requerido!");
+                ((EditText)findViewById(R.id.input_email)).setError("El E-mail es requerido!");
         }
     }
 
     public void loadDatos(){
-        this.getUsuario().setEmail(((EditText)findViewById(R.id.user_email_r)).getText().toString().trim());
-        this.getUsuario().setNombre(((EditText)findViewById(R.id.user_name_r)).getText().toString().trim());
-        this.getUsuario().setApellido(((EditText)findViewById(R.id.user_last_name_r)).getText().toString().trim());
-        this.getUsuario().setClave(((EditText)findViewById(R.id.user_pass_r)).getText().toString().trim());
-        this.getUsuario().setId(this.myRef.push().getKey());
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED){
-            Toast.makeText(this,"No tiene permisos de Localizacíon",Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},CODE_REQUEST );
-        }else{
-            Toast.makeText(this,"tiene permisos de Localizacíon",Toast.LENGTH_LONG).show();
-            locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            LocationListener locationListener = new LocationListener() {
-                public void onLocationChanged(Location location) {
-                    // Called when a new location is found by the network location provider.
-                    makeUseOfNewLocation(location);
-                }
-
-                public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-                public void onProviderEnabled(String provider) {}
-
-                public void onProviderDisabled(String provider) {}
-            };
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, time, distance,locationListener);
-
-        }
-
-
+        this.getUsuarioNuevo().setUsername(((EditText)findViewById(R.id.input_username)).getText().toString().trim());
+        this.getUsuarioNuevo().setDocumento(((EditText)findViewById(R.id.input_cedula)).getText().toString().trim());
+        this.getUsuarioNuevo().setEmail(((EditText)findViewById(R.id.input_email)).getText().toString().trim());
+        this.getUsuarioNuevo().setPrimerNombre(((EditText)findViewById(R.id.input_nombres)).getText().toString().trim());
+        this.getUsuarioNuevo().setPrimerApellido(((EditText)findViewById(R.id.input_apellidos)).getText().toString().trim());
+        this.getUsuarioNuevo().setIdCiudad(1);
+        this.getUsuarioNuevo().setIdDepartamento(1);
+        this.getUsuarioNuevo().setIdEmpresa(1);
+        if(this.getUsuarioNuevo().getLonguitud()==0)
+            this.getUsuarioNuevo().setLatitud(Float.valueOf("4.624793"));
+        if(this.getUsuarioNuevo().getLonguitud()==0)
+            this.getUsuarioNuevo().setLonguitud(Float.valueOf("-74.064364"));
     }
 
-    public void makeUseOfNewLocation(Location l){
-        double lat = l.getLatitude();
-        //loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        try {
-            this.getUsuario().setLatitud(String.valueOf(l.getLatitude()));
-            this.getUsuario().setLongitud(String.valueOf(l.getLongitude()));
-            this.getMyRef().child("users").child(this.getUsuario().getClave()).setValue(this.getUsuario());
-            this.setReloadLocationAlter(false);
-        }catch (Exception e){
-            Log.d("LOCATION","NO se consigio los daos de localizacion.");
-        }
-    }
+    protected  void crearUsuario(User usuario){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
+        apiService service = retrofit.create(apiService.class);
+        Call<User> call =null;
+        if(this.getIdUserLoaded()==null)
+             call=service.agregarUsuario(usuario);
+        else if(this.getIdUserLoaded()!=null)
+            call=service.actualizarUsuario(usuario);
 
-    public void alterLocationForce(){
-        try {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED){
-                Toast.makeText(this,"No tiene permisos de Localizacíon",Toast.LENGTH_LONG).show();
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},CODE_REQUEST );
-            }else{
-                Toast.makeText(this,"tiene permisos de Localizacíon",Toast.LENGTH_LONG).show();
-                this.getUsuario().setLatitud(String.valueOf(((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLatitude()));
-                this.getUsuario().setLongitud(String.valueOf(((Location) locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)).getLongitude()));
-                this.getMyRef().child("users").child(this.getUsuario().getClave()).setValue(this.getUsuario());
-                this.setReloadLocationAlter(false);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                setUsuarioLogin(response.body());
+                goToUsers();
             }
-        }catch (Exception e){
-            Log.d("LOCATION","NO se consigio los daos de localizacion.");
-        }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
     }
 
-    public void crearUsuario(Usuario usu){
-        if(this.isReloadLocationAlter())
-            alterLocationForce();
-        this.getMyRef().child("users").child(usu.getClave()).setValue(usu);
-        this.miLogin.createUserWithEmailAndPassword(usu.getEmail(), usu.getClave())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Create", "createUserWithEmail:success");
-                            userLogin = miLogin.getCurrentUser();
+    protected  void loadUsuario(Integer id){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
+        apiService service = retrofit.create(apiService.class);
+        Call<User> call = service.getUserById(id);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                setUsuarioNuevo(response.body());
+                establecerFormulario();
+            }
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("No-create", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(registro.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
 
-                        }
+            }
+        });
 
-                        // ...
-                    }
-                });
+    }
 
-        Intent inte= new Intent(this, home.class);
-        inte.putExtra(Usuario.PROP_EMAIL,this.usuario.getEmail());
-        inte.putExtra(Usuario.PROP_CLAVE,this.usuario.getClave());
+    public void establecerFormulario(){
+        ((EditText)findViewById(R.id.input_username)).setText(this.usuarioNuevo.getUsername());
+        ((EditText)findViewById(R.id.input_username)).setEnabled(false);
+        ((EditText)findViewById(R.id.input_cedula)).setText(this.usuarioNuevo.getDocumento());
+        ((EditText)findViewById(R.id.input_cedula)).setEnabled(false);
+        ((EditText)findViewById(R.id.input_email)).setText(this.usuarioNuevo.getEmail());
+        ((EditText)findViewById(R.id.input_nombres)).setText(this.usuarioNuevo.getPrimerNombre());
+        ((EditText)findViewById(R.id.input_apellidos)).setText(this.usuarioNuevo.getPrimerApellido());
+    }
+
+    public void goToUsers(){
+        Intent inte= new Intent(this, usuarios.class);
+        inte.putExtra("login",this.getUsuarioLogin());
         startActivity(inte);
     }
 
-    public boolean isReloadLocationAlter() {
-        return reloadLocationAlter;
+
+    public User getUsuarioNuevo() {
+        return usuarioNuevo;
     }
 
-    public void setReloadLocationAlter(boolean reloadLocationAlter) {
-        this.reloadLocationAlter = reloadLocationAlter;
+    public void setUsuarioNuevo(User usuarioNuevo) {
+        this.usuarioNuevo = usuarioNuevo;
+    }
+
+    public User getUsuarioLogin() {
+        return usuarioLogin;
+    }
+
+    public void setUsuarioLogin(User usuarioLogin) {
+        this.usuarioLogin = usuarioLogin;
+    }
+
+    public Integer getIdUserLoaded() {
+        return idUserLoaded;
+    }
+
+    public void setIdUserLoaded(Integer idUserLoaded) {
+        this.idUserLoaded = idUserLoaded;
     }
 }

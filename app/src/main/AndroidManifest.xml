@@ -52,7 +52,8 @@
             android:label="@string/title_activity_mapas" />
         <activity android:name=".registro" />
         <activity android:name=".usuarios" />
-        <activity android:name=".grupos"></activity>
+        <activity android:name=".grupos" />
+        <activity android:name=".usuario"></activity>
     </application>
 
 </manifest>

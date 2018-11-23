@@ -1,7 +1,10 @@
 package youcompany.find.findyoucompany;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -15,11 +18,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 public class usuarios extends AppCompatActivity {
     User usuarioLogin;
     ListView list;
     ArrayList<String> titles = new ArrayList<>();
+    ArrayList<Integer> idUsuer = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
     public User getUsuarioLogin() {
@@ -62,13 +67,23 @@ public class usuarios extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,titles);
         list = (ListView) findViewById(R.id.lista_usuarios);
         list.setAdapter(arrayAdapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent inte = new Intent(view.getContext(), registro.class);
+                inte.putExtra("login",getUsuarioLogin());
+                inte.putExtra("idEdit",idUsuer.get(position));
+                startActivity(inte);
+
+            }
+        });
         this.getUsuarios();
 
 
     }
 
     private void getUsuarios() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cunlmsprueba.catedra.edu.co:8090").addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
         apiService service = retrofit.create(apiService.class);
         Call<List<User>> call = service.getUsuarios();
 
@@ -77,6 +92,7 @@ public class usuarios extends AppCompatActivity {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 for(User us : response.body()) {
                     titles.add("N° Documento: "+us.getDocumento()+"\nNombres: "+us.getPrimerNombre()+"\nApellidos: "+us.getPrimerApellido());
+                    idUsuer.add(us.getId());
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -85,5 +101,11 @@ public class usuarios extends AppCompatActivity {
             public void onFailure(Call<List<User>> call, Throwable t) {
             }
         });
+    }
+
+    public void toAddUser(View view){
+        Intent inte = new Intent(view.getContext(), registro.class);
+        inte.putExtra("login",getUsuarioLogin());
+        startActivity(inte);
     }
 }

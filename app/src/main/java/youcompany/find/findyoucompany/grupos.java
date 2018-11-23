@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import utils.Constantes;
 
 public class grupos extends AppCompatActivity {
 
@@ -68,7 +69,7 @@ public class grupos extends AppCompatActivity {
     }
 
     private void getGrupos() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cunlmsprueba.catedra.edu.co:8090").addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constantes.SERVICE_REST).addConverterFactory(GsonConverterFactory.create()).build();
         apiService service = retrofit.create(apiService.class);
         Call<List<Grupo>> call = service.getGrupos();
 

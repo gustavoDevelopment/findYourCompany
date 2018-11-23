@@ -18,35 +18,40 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="287dp"
+        android:layout_width="165dp"
         android:layout_height="40dp"
-        android:layout_below="@+id/text_lat"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="27dp"
         android:text="FIND YOU COMPANY" />
 
     <Button
         android:id="@+id/btn_perfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/imageView3"
-        android:layout_alignTop="@+id/btn_estadisticas"
+        android:layout_alignEnd="@+id/imageView3"
+        android:layout_below="@+id/imageView3"
         android:text="Mi perfil" />
 
     <Button
         android:id="@+id/btn_usuarios"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/imageView3"
         android:layout_alignStart="@+id/imageView3"
-        android:layout_alignTop="@+id/btn_ayudas"
+        android:layout_alignTop="@+id/btn_perfil"
+        android:layout_marginBottom="-55dp"
         android:onClick="goToUser"
         android:text="Usuarios" />
 
     <Button
         android:id="@+id/btn_grupos"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_estadisticas"
-        android:layout_alignEnd="@+id/btn_perfil"
+        android:layout_height="40dp"
+        android:layout_alignBaseline="@+id/imageView3"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/imageView3"
+        android:layout_marginBottom="98dp"
         android:onClick="goToGrupos"
         android:text="Grupos" />
 
@@ -54,53 +59,34 @@
         android:id="@+id/btn_mapa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_grupos"
         android:layout_alignEnd="@+id/imageView3"
-        android:layout_below="@+id/btn_usuarios"
-        android:onClick="lanzarMapa"
+        android:onClick="goToMapa"
         android:text="Mapa" />
-
-    <Button
-        android:id="@+id/btn_estadisticas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="36dp"
-        android:layout_marginEnd="38dp"
-        android:text="Estadisticas" />
-
-    <Button
-        android:id="@+id/btn_ayudas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/imageView3"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="138dp"
-        android:text="Ayudas" />
 
     <TextView
         android:id="@+id/text_lat"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btn_perfil"
-        android:layout_below="@+id/text_long"
-        android:text="ASA" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="ASA"
+        android:textAlignment="textEnd" />
 
     <TextView
         android:id="@+id/text_long"
         android:layout_width="133dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btn_perfil"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:text="prueba" />
 
     <TextView
         android:id="@+id/app_user_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="19dp"
+        android:layout_alignEnd="@+id/imageView3"
+        android:layout_alignParentTop="true"
         android:text="no_login" />
 
 </RelativeLayout>
